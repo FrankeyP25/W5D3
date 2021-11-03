@@ -33,7 +33,7 @@ class User
     end
 
     def self.find_by_name(fname, lname)
-        user = QuestionsDatabase.instance.execute(<<-SQL,fname, lname)
+        users = QuestionsDatabase.instance.execute(<<-SQL,fname, lname)
           SELECT
             *
           FROM
@@ -41,7 +41,7 @@ class User
           WHERE
             fname = ? AND lname = ?
         SQL
-        User.new(user.first)
+        users.map {|user|User.new(user)}
     end
 
     attr_accessor :id, :title, :body, :author
@@ -51,5 +51,14 @@ class User
         @fname = options["fname"]
         @lname = options["lname"]
     end
+
+    def authored_questions
+      Questions.find_by_author(@id)
+    end
+
+    def authored_replies
+      Reply.find_by_user_id(@id)
+    end
+
 
 end

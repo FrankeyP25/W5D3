@@ -80,7 +80,7 @@ class Reply
         replies.map { |reply| Reply.new(reply) }
     end
 
-    attr_accessor :id, :subject_question, :parent_reply, :user_id, :body
+    attr_accessor :id, :subject_question, :user_id, :body
       
     def initialize(options)
         @id = options["id"]
@@ -88,6 +88,29 @@ class Reply
         @parent_reply = options["parent_reply"]
         @user_id = options["user_id"]
         @body = options["body"]
+    end
+
+    def author
+      self.user_id
+    end
+
+    def question
+      self.subject_question
+    end
+
+    def parent_reply
+      @parent_reply
+    end
+
+    def child_replies 
+      QuestionsDatabase.instance.execute(<<-SQL)
+        SELECT
+         *
+        FROM
+          replies
+        WHERE
+          parent_reply = #{@id}   
+      SQL
     end
 
 end

@@ -56,7 +56,7 @@ class QuestionFollow
         question_follows.map { |question_follow| QuestionFollow.new(question_follow) }
     end
 
-    attr_accessor :id, :title, :body, :author
+    attr_accessor :id, :user_id, :question_id
       
     def initialize(options)
         @id = options["id"]
