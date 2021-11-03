@@ -1,5 +1,6 @@
 require 'sqlite3'
 require 'singleton'
+require 'users'
 # require 'questions_database.rb'
 
 class QuestionsDatabase < SQLite3::Database
