@@ -57,7 +57,19 @@ class QuestionFollow
     end
 
     def self.followers_for_question_id(question_id)
-      
+      users = QuestionsDatabase.instance.execute(<<-SQL)
+        SELECT
+          id, fname, lname
+        FROM
+          question_follows
+        JOIN 
+          users 
+        ON
+          users.id = question_follows.user_id
+        WHERE
+          question_id = #{question_id}  
+      SQL
+      users.map {|user| User.new(user)}
     end
 
     attr_accessor :id, :user_id, :question_id
