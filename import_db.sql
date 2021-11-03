@@ -57,11 +57,17 @@ VALUES
    ('Question 1', 'WT?', 1),
    ('Question 2', 'WFrosky?', 2);
 
--- INSERT INTO
---    questions (title, body)
--- VALUES
---    ('Question 1', 'WT?'),
---    ('Question 2', 'WFrosky?');
+INSERT INTO
+  question_follows(user_id, question_id)
+VALUES
+  (1,2),
+  (2,1);
+
+INSERT INTO
+  replies(subject_question, parent_reply, user_id, body)
+VALUES
+  (2, NULL, 1, "Super blue"),
+  (2, 1, 1, "no super green");
 
 
 
