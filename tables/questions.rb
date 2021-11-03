@@ -68,7 +68,8 @@ class Question
         questions.map {|question| Question.new(question)}
     end
 
-    attr_accessor :id, :title, :body, :author
+
+    attr_accessor :id, :title, :body
       
     def initialize(options)
         @id = options["id"]
@@ -77,8 +78,12 @@ class Question
         @author = options["author"]
     end
 
+    def author
+      Question.find_by_author(@author)
+    end
+
     def replies
-        Reply.find_by_question_id(id)
+        Reply.find_by_subject_question(@id)
     end
 
 end

@@ -1,5 +1,8 @@
 require 'sqlite3'
 require 'singleton'
+require 'users'
+require 'questions'
+
 # require 'questions_database.rb'
 
 class QuestionsDatabase < SQLite3::Database
@@ -91,26 +94,43 @@ class Reply
     end
 
     def author
-      self.user_id
+      Users.find_by_id(@user_id)
     end
 
     def question
-      self.subject_question
+        question = QuestionsDatabase.instance.execute(<<-SQL)
+          SELECT
+            *
+          FROM
+            replies
+          WHERE
+            subject_question = #{@subject_question}
+          SQL
+          Question.new(question)
     end
 
     def parent_reply
-      @parent_reply
+        reply = QuestionsDatabase.instance.execute(<<-SQL)
+        SELECT
+          *
+        FROM
+          replies
+        WHERE
+            id = #{@parent_reply}
+        SQL
+        Reply.new(reply)
     end
 
     def child_replies 
-      QuestionsDatabase.instance.execute(<<-SQL)
+      children = QuestionsDatabase.instance.execute(<<-SQL)
         SELECT
          *
         FROM
           replies
         WHERE
           parent_reply = #{@id}   
-      SQL
+        SQL
+      children.map { |child| Reply.new(child) }
     end
 
 end
