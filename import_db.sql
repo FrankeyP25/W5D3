@@ -54,8 +54,14 @@ VALUES
 INSERT INTO
    questions (title, body, author)
 VALUES
-   ('Question 1', 'WTF?', 1),
-   ('Question 2', 'WTFrosky?', 2);
+   ('Question 1', 'WT?', 1),
+   ('Question 2', 'WFrosky?', 2);
+
+-- INSERT INTO
+--    questions (title, body)
+-- VALUES
+--    ('Question 1', 'WT?'),
+--    ('Question 2', 'WFrosky?');
 
 
 

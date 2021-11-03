@@ -7,20 +7,32 @@ class QuestionsDatabase < SQLite3::Database
     def initialize
         super('questions.db')
         self.type_translation = true
-        self.result_as_hash = true
+        self.results_as_hash = true
     end
 
 end
 
 class Question
 
-    def self.all()
-        data = QuestionsDatabase.instance.execute("SELECT * FROM users")
+    def self.all
+        data = QuestionsDatabase.instance.execute("SELECT * FROM questions")
         data.map {|ele| Question.new(ele)}
     end
 
-    attr_accessor :id, :title, :body, :author
+    def self.find_by_id(id)
+        question = QuestionsDatabase.instance.execute(<<-SQL,id)
+          SELECT
+            *
+          FROM
+            questions
+          WHERE
+            id = ?
+        SQL
+        Question.new(question.first)
+    end
 
+    attr_accessor :id, :title, :body, :author
+      
     def initialize(options)
         @id = options["id"]
         @title = options["title"]
@@ -29,3 +41,6 @@ class Question
     end
 
 end
+
+# a = Question.new("hello", "world", "hey")
+# p a
